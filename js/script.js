@@ -20,16 +20,42 @@ const dwmajo = [
 ];
 
 // Obtener los contenedores y botones del DOM
-const dwmajoContainer = document.getElementById("estilo-container");
+const dwmajoCards = document.querySelectorAll("#estilos .project-card[data-gender]");
 const filterButtons = document.querySelectorAll(".filter-btn");
 
-
 // Función para renderizar las tarjetas 
-function renderDw(genero) {
-    let dwmajoToRender = [];
-    if (genero === "all") {
-        dwmajoToRender = dwmajo;
-    } else {
-        dwmajoToRender = dwmajo.filter(Dwmajo => Dwmajo.genero === genero);
-    }
-    }
+function renderDw(category) {
+    dwmajoCards.forEach(card => {
+        const matchesCategory = category === "all" || card.dataset.gender === category;
+        card.style.display = matchesCategory ? "" : "none";
+    });
+}
+
+// Agrega event listeners a los botones de filtro
+filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        const category = button.dataset.category;
+
+        // Remueve la clase 'active' de todos los botones
+        filterButtons.forEach(btn => btn.classList.remove("active"));
+        // Agrega la clase 'active' al botón clickeado
+        button.classList.add("active");
+
+        // Renderiza las tarjetas con el filtro seleccionado
+        renderDw(category);
+    });
+});
+
+// Renderizar todos para cargar la página
+document.addEventListener("DOMContentLoaded", () => {
+    renderDw('all');
+});
+
+
+// Función para el botón de volver al inicio
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
